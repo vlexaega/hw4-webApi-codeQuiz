@@ -3,7 +3,7 @@
 }
 main {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 }
 section {
     display: flex;
@@ -14,4 +14,29 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 10%;
+    margin-right: 30%;
+    margin-left: 28%;
+}
+
+#initiate {
+    background-color: rgb(109, 209, 92);
+    color: black;
+    display: flex;
+    justify-content: center;
+    margin-right: 50%;
+    margin-left: 30%;
+}
+
+#response1, #response2, #response3, #response4 {
+    background-color: rgb(109, 209, 92);
+    color: black;
+    display: flex;
+    justify-content: center;
+    margin-right: 50%;
+    margin-left: 30%;
+}
+
+#initiate:hover, #response1:hover, #response2:hover, #response3:hover, #response4:hover {
+    background-color: aqua;
 }
