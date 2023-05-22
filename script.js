@@ -1,6 +1,29 @@
 // IDEAS OF USE
-// User starts quiz
-var startQuiz = document.querySelector("#startQuiz");
+// functions
+function generateQuiz (questions, quizContainer, resultsContainer, submitButton){
+    // User starts quiz
+    function showQuestions(questions, quizContainer){
+        var output = [];
+        var answers;
+
+        for (var i=0; i<question.length, i++) {
+            answers = [];
+            for (letter in questions[i].answers){
+                answers.push()
+            }
+        }
+    }
+    function showResults(questions, quizContainer, resultsContainer){
+
+    }
+    // shows the user the questions
+    showQuestions(questions, quizContainer);
+    submitButton.onclick = function(){
+        showResults(questions, quizContainer, resultsContainer);
+    }
+}
+
+// var startQuiz = document.querySelector("#startQuiz");
 var questionsAndAnswers = [
     {
         question: "What is js short for?",
@@ -23,6 +46,9 @@ var questionsAndAnswers = [
     }
 ]
 
+// User starts quiz
+
+
 // Determining number of questions 
 var questionCount = 0;
 
@@ -33,9 +59,21 @@ var timeOut = false;
 var endGame = 0;
 
 // Array to store the results
-var resultsStore = [];
+var resultsArray = [];
 
+function questionVerify() {
+    if (secondCount < 0) {
+        return
+    }
+    else {
+        return newQuestion();
+    }
+}
 
+// Show user the question and listen for clicks on the button #startQuiz
+function newQuestion(){
+    
+}
 
 // ROUGH IDEAS 
 // User sees quiz questions and responses
