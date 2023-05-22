@@ -1,14 +1,17 @@
 // IDEAS OF USE
-var questions = ["Whats the highest number?"]
-
+// User starts quiz
 var startQuiz = document.querySelector("#startQuiz");
-console.log(startQuiz, "hello world");
-var textChanger = document.querySelectorAll("questions");
 
-startQuiz.addEventListener("click", function() {
-    
+// User sees quiz questions and responses 
 
-})
+// User selects response 
+    // Timer reduces by 10 seconds if response is wrong 
+
+// User completes quiz
+    // results displayed in prompt 
+//
+
+
 // user lands on page, greeted with html landing page
     // eventListener for click on "start quiz"
     // timer starts
