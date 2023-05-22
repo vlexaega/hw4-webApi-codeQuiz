@@ -1,36 +1,17 @@
-console.log("hello world");
-console.log("hey vega, i'm working");
-
-var myQuestions = [
-    question1 = "What character is a Logical Not?",
-    answers = {
-        a:'?',
-        b: '%',
-        c: '!',
-    },
-    correctAnswer = 'c'
-]
-console.log(myQuestions);
-
-function showQuestions()
-
-// function showQuestions(questions, quizContainer){
-
-// }
-
-
-
 // IDEAS OF USE
+var questions = ["Whats the highest number?"]
 
+var startQuiz = document.querySelector("#startQuiz");
+console.log(startQuiz, "hello world");
+var textChanger = document.querySelectorAll("questions");
+
+startQuiz.addEventListener("click", function() {
+    
+
+})
 // user lands on page, greeted with html landing page
-//  clicks the button "let's start"
-    // button data replaced by question 1 (load question function)
+    // eventListener for click on "start quiz"
+    // timer starts
+// text field updates to question 1
+    // user sees list of response options
     // 
-//  correct or incorrect answer is logged 
-    // if correct, proceed to next question function
-    // if incorrect, timer reduced by 10 seconds 
-        // prompt (Incorrect! 10 seconds deducted)
-        // then proceed to next question function
-//  repeat this step 5 times // define questions 
-// after last question is answered OR timer reaches zero
-    // display score, including number correct and incorrect 
