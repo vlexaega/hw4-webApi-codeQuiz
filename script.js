@@ -1,53 +1,8 @@
 // IDEAS OF USE
-// functions
-function generateQuiz (questions, quizContainer, resultsContainer, submitButton){
-    // User starts quiz
-    function showQuestions(questions, quizContainer){
-        var output = [];
-        var answers;
-
-        for (var i=0; i<question.length, i++) {
-            answers = [];
-            for (letter in questions[i].answers){
-                answers.push()
-            }
-        }
-    }
-    function showResults(questions, quizContainer, resultsContainer){
-
-    }
-    // shows the user the questions
-    showQuestions(questions, quizContainer);
-    submitButton.onclick = function(){
-        showResults(questions, quizContainer, resultsContainer);
-    }
-}
-
-// var startQuiz = document.querySelector("#startQuiz");
-var questionsAndAnswers = [
-    {
-        question: "What is js short for?",
-        answers: {
-            a: 'Javascript',
-            b: 'Justsurf',
-            c: 'Joinsomething',
-            d: 'justslump',
-        },
-        correctAnswers: 'a',
-    },
-    {
-        question: "What is our professors name?",
-        answers: {
-            a: 'benjanmin',
-            b: 'larry',
-            c: 'json',
-            d: 'billy',
-        }
-    }
-]
-
-// User starts quiz
-
+// DEPENDENCIES 
+var questionsEl = document.querySelector('#questions');
+var timerEl = document.querySelector('#timer');
+var startQuizEl = document.querySelector('#startQuiz');
 
 // Determining number of questions 
 var questionCount = 0;
@@ -60,20 +15,65 @@ var endGame = 0;
 
 // Array to store the results
 var resultsArray = [];
+// var startQuiz = document.querySelector("#startQuiz");
+var questionsAndAnswers = [
+    {
+        question: "What is js short for?",
+        answers: {
+            a: 'Javascript',
+            b: 'Justsurf',
+            c: 'Joinsomething',
+            d: 'justslump',
+        },
+        correctAnswers: 'a',
+    },
+]
 
-function questionVerify() {
-    if (secondCount < 0) {
-        return
+startQuiz.addEventListener("click", startQuiz);
+// User starts quiz
+// triggers setTime() function
+function startQuiz () {
+    console.log(question);
+    var userSelection = [];
+    if (questionCount > (questionsAndAnswers.length - 1) && (endGameRun <1)) {
+        return endGame();
     }
     else {
-        return newQuestion();
+        var newHeader = document.createElement ("h1");
+        newHeader.textContent = questionsAndAnswers[questionCount].question;
+        newHeader.id = 'questions';
+        document.getElementById("questions").appendChild(newHeader)
     }
+
+}
+function startQuiz()
+// Show user the question and listen for clicks on the button #startQuiz
+// function newQuestion(){
+//     question1.addEventLister("click", function() {
+
+//     }
+
+// };
+
+// Creating the timer
+function setTime () {
+    var timerInterval = setInterval(function() {
+        secondCount--;
+        timerEl.textContent = secondCount + " time remaining.";
+
+        if (secondCount === 0) {
+            clearInterval(timerInterval);
+            sendMessage();
+        }
+    }, 1000);
 }
 
-// Show user the question and listen for clicks on the button #startQuiz
-function newQuestion(){
-    
+function sendMessage () {
+    prompt(questionsAndAnswers);
 }
+
+// INITIALIZATIONS 
+setTime();
 
 // ROUGH IDEAS 
 // User sees quiz questions and responses
