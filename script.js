@@ -17,13 +17,19 @@ var questions = [
             ]},
 
 ];
+
+// DEPENDENCIES
 var questionEl = document.getElementById("question");
 var answerButtons = document.getElementById("answer-buttons");
 var nextButton = document.getElementById("next-btn");
+var timerEl = document.getElementById("timer");
 
-//store question index and score
+//store question index, score and timer
 var currentQuestionIndex = 0;
 var score = 0;
+var timerOut = false;
+var endGame = 0;
+var secondCount = 120;
 
 // functions
 
