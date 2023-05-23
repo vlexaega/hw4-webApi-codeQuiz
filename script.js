@@ -66,6 +66,8 @@ function selectAnswer(e){
     var isCorrect = selectedBtn.dataset.correct === "true";
     if (isCorrect){
         selectedBtn.classList.add("correct");
+        //increase score by 1
+        score++;
     }
     else {
         selectedBtn.classList.add("incorrect");
@@ -78,6 +80,34 @@ function selectAnswer(e){
     });
     nextButton.style.display = "block";
 }
+
+//define showScore
+function showScore (){
+    resetState();
+    questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
+    nextButton.innerHTML = "Play Again";
+    nextButton.style.display = "block";
+}
+
+//define handleNextButton to show further questions
+function handleNextButton(){
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length){
+        showQuestion(); // shows next question with updated question index 
+    }
+    else {
+        showScore();
+    }
+}
+
+nextButton.addEventListener("click", ()=>{
+    if (currentQuestionIndex < questions.length){
+        handleNextButton();
+    }
+    else {
+        startQuiz();
+    }
+});
 
 startQuiz();
 
