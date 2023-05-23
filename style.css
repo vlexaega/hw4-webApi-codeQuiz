@@ -54,6 +54,27 @@ body {
     background: #222;
     color: white;
 }
+
+#next-btn   {
+    background: blue;
+    color: white;
+    font-weight: 500;
+    width: 150px;
+    border: 0;
+    padding: 10px;
+    margin: 20px auto 0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+}
+
+.correct {
+    background: yellow;
+}
+
+.incorrect {
+    background: red;
+}
 /* * {
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
