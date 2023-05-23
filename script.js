@@ -47,6 +47,9 @@ var questionEl = document.getElementById("question");
 var answerButtons = document.getElementById("answer-buttons");
 var nextButton = document.getElementById("next-btn");
 var timerEl = document.getElementById("timer");
+var scoreboxEl = document.getElementById("scorebox");
+var initialinputEl = document.getElementById("initialinput");
+var submitfeedbackEl = document.getElementById("submitfeedback");
 
 //store question index, score and timer
 var currentQuestionIndex = 0;
@@ -57,11 +60,30 @@ var secondCount = 120;
 
 // functions
 
+function setTime(){
+    var timerInterval = setInterval(function(){
+        secondCount--;
+        timerEl.textContent = secondCount + " seconds remaining!!";
+
+        if (secondCount === 0){
+            clearInterval(timerInterval);
+            sendMessage();
+        }
+    }, 1000);//number of milliseconds between intervals
+};
+
+function sendMessage(){
+    timerEl.textContent = "Times Up!!";
+    startQuiz();
+}
+
 function startQuiz (){
     currentQuestionIndex = 0;
     score = 0;
     nextButton.innerHTML = "Next";
     showQuestion();
+        // start timer here! 
+    setTime();
 }
 
 function showQuestion(){
@@ -77,7 +99,10 @@ function showQuestion(){
         answerButtons.appendChild(button);
         if (answer.correct){
             button.dataset.correct = answer.correct;
-        }
+        };
+        if (answer = false){
+            timerEl.textContent = (secondCount - 10 + " seconds remaining");
+        }  // I don't think this works..nope it doesn't
         button.addEventListener("click", selectAnswer);
     });
 }
@@ -98,6 +123,8 @@ function selectAnswer(e){
         selectedBtn.classList.add("correct");
         //increase score by 1
         score++;
+        // store score count into local storage 
+        // keep adding to score count as the questions are answered
     }
     else {
         selectedBtn.classList.add("incorrect");
@@ -113,10 +140,13 @@ function selectAnswer(e){
 
 //define showScore
 function showScore (){
+    //show 
     resetState();
     questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
     nextButton.innerHTML = "Play Again";
     nextButton.style.display = "block";
+
+
 }
 
 //define handleNextButton to show further questions
@@ -128,6 +158,7 @@ function handleNextButton(){
     else {
         showScore();
     }
+    
 }
 
 nextButton.addEventListener("click", ()=>{
@@ -139,48 +170,89 @@ nextButton.addEventListener("click", ()=>{
     }
 });
 
-function displayScoreSubmitMessage(type, message) {
-    var submitfeedback = document.createElement("p");
-    submitfeedback.id = 'submitfeedback'; 
-    document.querySelector("#scorebox").appendChild(submitfeedback);
 
-    document.querySelector("#submitfeedback").textContent = message;
-    document.querySelector("#submitfeedback").setAttribute("class", type);
-    }
 
-document.getElementById("submit").addEventListener("click", function(event) {
-    event.preventDefault();
-
-    var initials = document.querySelector("#initialinput").value;
-
-    if (initials === "") {
-        displayScoreSubmitMessage("error", "Box cannot be blank");
-    }
-
-    else {
-        displayScoreSubmitMessage("success", "Your score has been saved!");
-    // Save initials and score to localStorage 
-    localStorage.setItem("initialzz", initials);
-    localStorage.setItem("finalScore", score);
-    storeScore();
-    }
-    })
-function storeScore() {
-    //Retrieve the stuff
-  var initialsText = localStorage.getItem("initialzz");
-  var highscoreText = localStorage.getItem("finalScore");
-
-  //take both and add to resultsStorage
-  var highScoreEntry = {
-        initialz: initialsText,
-        scorelog: highscoreText
-  };
-
-  resultsStorage.push(highScoreEntry);
-  return ////console.log("STORESCORE HAS RUN");
-
-}
 startQuiz();
+
+
+
+// function displayScoreSubmitMessage(type, message){
+//     var submitFeedback = document.createElement("p");
+//     submitFeedback.id = 'submitFeedback';
+//     document.querySelector('#scorebox').appendChild(submitFeedback);
+//     document.querySelector('#submitfeedback').textContent = message;
+//     document.querySelector('#submitfeedback').setAttribute = ("class", type);
+// }
+// document.getElementById("next-btn").addEventListener("click", function(event){
+//     event.preventDefault();
+//     var initials = document.querySelector('#initialinput');
+//     if (initials === ""){
+//         displayScoreSubmitMessage("error", "Box cannot be blank");
+//     }
+//     else {
+//         displayScoreSubmitMessage("success", "Your score has been saved!");
+//         localStorage.setItem("initialZ", initials);
+//         localStorage.setItem("finalScore", score);
+//         storeScore();
+//     }
+// });
+
+// function storeScore(){
+//     var initialsText = localStorage.getItem("initialZ");
+//     var highscoreText = localStorage.getItem("finalScore");
+
+//     var highScoreEntry = {
+//         initialZ: initialsText,
+//         scorelog: highscoreText
+//     };
+//     resultsStorage.push(highScoreEntry);
+//     console.log("STORESCORE HAS RUN");
+
+// };
+
+
+
+// function displayScoreSubmitMessage(type, message) {
+//     var submitfeedback = document.createElement("p");
+//     submitfeedback.id = 'submitfeedback'; 
+//     document.querySelector("#scorebox").appendChild(submitfeedback);
+
+//     document.querySelector("#submitfeedback").textContent = message;
+//     document.querySelector("#submitfeedback").setAttribute("class", type);
+//     }
+
+// document.getElementById("submit").addEventListener("click", function(event) {
+//     event.preventDefault();
+
+//     var initials = document.querySelector("#initialinput").value;
+
+//     if (initials === "") {
+//         displayScoreSubmitMessage("error", "Box cannot be blank");
+//     }
+
+//     else {
+//         displayScoreSubmitMessage("success", "Your score has been saved!");
+//     // Save initials and score to localStorage 
+//     localStorage.setItem("initialzz", initials);
+//     localStorage.setItem("finalScore", score);
+//     storeScore();
+//     }
+//     })
+// function storeScore() {
+//     //Retrieve the stuff
+//   var initialsText = localStorage.getItem("initialzz");
+//   var highscoreText = localStorage.getItem("finalScore");
+
+//   //take both and add to resultsStorage
+//   var highScoreEntry = {
+//         initialz: initialsText,
+//         scorelog: highscoreText
+//   };
+
+//   resultsStorage.push(highScoreEntry);
+//   return ////console.log("STORESCORE HAS RUN");
+
+
 
 
 
