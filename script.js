@@ -8,12 +8,36 @@ var questions = [
             { text: "Justslump", correct: false},
         ]},
         {
-            question: "What is HTML short for?",
+            question: "What is Javascript?",
             answers: [
-                { text: "HyperText Markup Language", correct: true},
-                { text: "Holy Tamale Mile Long", correct: false},
-                { text: "Hey There Mixed Length", correct: false},
-                { text: "Happy To Meet Larry", correct: false},
+                { text: "Javascript is a scripting language used to make the website interactive", correct: true},
+                { text: "JavaScript is an assembly language used to make the website interactive", correct: false},
+                { text: "JavaScript is a compiled language used to make the website interactive", correct: false},
+                { text: "None of the mentioned", correct: false},
+            ]},
+        {
+            question: "Among the given statements, which statement defines closures in JavaScript?", 
+            answers: [
+                { text: "JavaScript is a function that is enclosed with references to its inner function scope", correct: false},
+                { text: "JavaScript is a function that is enclosed with references to its lexical environment", correct: true},
+                { text: "JavaScript is a function that is enclosed with the object to its inner function scope", correct: false},
+                { text: "None of the mentioned", correct: false},
+            ]},
+        {
+            question: "Which of the following is not javascript data types?", 
+            answers: [
+                { text: "Null type", correct: false},
+                { text: "Undefined type", correct: false},
+                { text: "Number type", correct: false},
+                { text: "All of the mentioned", correct: true},
+            ]},
+        {
+            question: " Which of the following object is the main entry point to all client-side JavaScript features and APIs?", 
+            answers: [
+                { text: "Position", correct: false},
+                { text: "Window", correct: true},
+                { text: "Standard", correct: false},
+                { text: "Location", correct: false},
             ]},
 
 ];
@@ -115,6 +139,47 @@ nextButton.addEventListener("click", ()=>{
     }
 });
 
+function displayScoreSubmitMessage(type, message) {
+    var submitfeedback = document.createElement("p");
+    submitfeedback.id = 'submitfeedback'; 
+    document.querySelector("#scorebox").appendChild(submitfeedback);
+
+    document.querySelector("#submitfeedback").textContent = message;
+    document.querySelector("#submitfeedback").setAttribute("class", type);
+    }
+
+document.getElementById("submit").addEventListener("click", function(event) {
+    event.preventDefault();
+
+    var initials = document.querySelector("#initialinput").value;
+
+    if (initials === "") {
+        displayScoreSubmitMessage("error", "Box cannot be blank");
+    }
+
+    else {
+        displayScoreSubmitMessage("success", "Your score has been saved!");
+    // Save initials and score to localStorage 
+    localStorage.setItem("initialzz", initials);
+    localStorage.setItem("finalScore", score);
+    storeScore();
+    }
+    })
+function storeScore() {
+    //Retrieve the stuff
+  var initialsText = localStorage.getItem("initialzz");
+  var highscoreText = localStorage.getItem("finalScore");
+
+  //take both and add to resultsStorage
+  var highScoreEntry = {
+        initialz: initialsText,
+        scorelog: highscoreText
+  };
+
+  resultsStorage.push(highScoreEntry);
+  return ////console.log("STORESCORE HAS RUN");
+
+}
 startQuiz();
 
 
