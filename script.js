@@ -56,7 +56,7 @@ var currentQuestionIndex = 0;
 var score = 0;
 var timerOut = false;
 var endGame = 0;
-var secondCount = 120;
+var secondCount = 60;
 
 // functions
 
@@ -72,8 +72,13 @@ function setTime(){
     }, 1000);//number of milliseconds between intervals
 };
 
+function resetTimer(){
+    return secondCount = 60;
+}
+
 function sendMessage(){
     timerEl.textContent = "Times Up!!";
+    resetTimer();
     startQuiz();
 }
 
@@ -100,9 +105,9 @@ function showQuestion(){
         if (answer.correct){
             button.dataset.correct = answer.correct;
         };
-        if (answer = false){
-            timerEl.textContent = (secondCount - 10 + " seconds remaining");
-        }  // I don't think this works..nope it doesn't
+        // if (answer = false){
+        //     timerEl.textContent = (secondCount - 10 + " seconds remaining");
+        // }  // I don't think this works..nope it doesn't
         button.addEventListener("click", selectAnswer);
     });
 }
@@ -112,18 +117,22 @@ function resetState(){
     while (answerButtons.firstChild){
         //remove all previous answers
         answerButtons.removeChild(answerButtons.firstChild)
-    }
-}
+    };
+};
 
 // confirms to user if answer is correct or incorrect
 function selectAnswer(e){
     var selectedBtn = e.target;
     var isCorrect = selectedBtn.dataset.correct === "true";
+    //count = isCorrect++;
     if (isCorrect){
         selectedBtn.classList.add("correct");
         //increase score by 1
-        score++;
         // store score count into local storage 
+        //console.log("you got 1 point");
+        //count++;
+        // localStorage.setItem("count", count);
+        
         // keep adding to score count as the questions are answered
     }
     else {
@@ -140,7 +149,7 @@ function selectAnswer(e){
 
 //define showScore
 function showScore (){
-    //show 
+    // THIS IS WHERE WE NEED TO DISPLAY THE STORED SCORE AND OFFER PLAY AGAIN BUTTON!
     resetState();
     questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
     nextButton.innerHTML = "Play Again";
