@@ -50,13 +50,14 @@ var timerEl = document.getElementById("timer");
 var scoreboxEl = document.getElementById("scorebox");
 var initialinputEl = document.getElementById("initialinput");
 var submitfeedbackEl = document.getElementById("submitfeedback");
+var quizEl = document.querySelector(".quiz");
 
 //store question index, score and timer
 var currentQuestionIndex = 0;
 var score = 0;
 var timerOut = false;
 var endGame = 0;
-var secondCount = 60;
+var secondCount;
 
 // functions
 
@@ -67,24 +68,17 @@ function setTime(){
 
         if (secondCount === 0){
             clearInterval(timerInterval);
-            sendMessage();
+            timerEl.textContent = "Times Up!!";
+            showScore();
         }
     }, 1000);//number of milliseconds between intervals
 };
 
-function resetTimer(){
-    return secondCount = 60;
-}
-
-function sendMessage(){
-    timerEl.textContent = "Times Up!!";
-    resetTimer();
-    startQuiz();
-}
 
 function startQuiz (){
     currentQuestionIndex = 0;
     score = 0;
+    secondCount = 60;
     nextButton.innerHTML = "Next";
     showQuestion();
         // start timer here! 
@@ -152,9 +146,15 @@ function showScore (){
     // THIS IS WHERE WE NEED TO DISPLAY THE STORED SCORE AND OFFER PLAY AGAIN BUTTON!
     resetState();
     questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
-    nextButton.innerHTML = "Play Again";
-    nextButton.style.display = "block";
-
+    let playAgainButton = document.createElement("button");
+    playAgainButton.addEventListener("click", function(){
+        quizEl.removeChild(playAgainButton);
+        startQuiz();
+    });
+    playAgainButton.textContent = "Play Again";
+    quizEl.appendChild(playAgainButton);
+    // nextButton.innerHTML = "Play Again";
+    // playAgainButton.style.display = "block";
 
 }
 
