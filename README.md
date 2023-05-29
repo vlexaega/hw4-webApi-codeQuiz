@@ -27,7 +27,8 @@ The webpage will be used to present users with a multiple choice quiz specific t
 
 
 ## Screenshot
-![screenGrab1](https://github.com/vlexaega/hw3-javascript-passwordGenerator/assets/132007323/f16a1ff8-5202-45a5-b104-f129da626878)
+![Untitled](https://github.com/vlexaega/hw4-webApi-codeQuiz/assets/132007323/d3965cbc-19fc-4772-aa09-8910a3bce31a)
+
 
 ## License
 N/A
