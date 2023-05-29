@@ -51,6 +51,8 @@ var questionsAndAnswers = [
 
 ];
 
+//endGame();
+
 // Question variable to create index
 var questionCount = 0;
 // Score and timer
@@ -61,6 +63,7 @@ var secondCount = 120;
 // Variable to store results
 var resultsStorage = new Array();
 
+resetEndGameRun(); 
 // Function to check if OK to make a new question goes here
 function confirmOkToMakeQuestion (){
     if (secondCount < 0) {
@@ -73,9 +76,9 @@ function confirmOkToMakeQuestion (){
 }
 // Function to make a question goes here 
 function makeQuestion (){
-    if (questionCount > (questionsAndAnswers.length - 1) && (endGameRun < 1)){
-        console.log("part of makeQuestion that causes the game to end has run")
-        return endGame()
+    if (questionCount > (questionsAndAnswers.length - 1) && (endGameRun <= 1)){
+        //console.log("part of makeQuestion that causes the game to end has run")
+        return endGame();
     }
     else {
         //clear the content box
@@ -173,24 +176,22 @@ function timerFunction (){
     }
 }
 // Function to end the game goes here
-function endGame(){
+function endGame () {
     //wipe the content box clean
     contentSpotEl.innerHTML = "";
     //wipe the feedback box clean
     feedbackEl.innerHTML = "";
     //wipe the timer box clean 
     timerBoxEl.innerHTML = "";
-
     //create a new header to tell user thanks for playing
     var newHeader = document.createElement("h1");
     newHeader.textContent = "Thanks for playing!";
     newHeader.id = 'endtext';
     document.getElementById("contentspot").appendChild(newHeader);
-
     //create a form to collect users data and save that plus the score to local storage
     var form = document.createElement("form");
     form.id = 'form';
-    document.getElementById("scorebox").appendChild(form);
+    document.getElementById("contentspot").appendChild(form);
 
     var initialLabel = document.createElement("Label");
     initialLabel.setAttribute("for", "initialbox");
@@ -210,24 +211,23 @@ function endGame(){
     submit.id = 'submit';
     document.getElementById("initialinput").after(submit);
     
-
-    var initialInput = document.querySelector("#initialinput");
+    //var initialInput = document.querySelector("#initialinput");
     var submissionResponseEl = document.createElement("p");
     document.querySelector("#feedback").appendChild(submissionResponseEl);
 
     function displayScoreSubmitMessage (type, message){
             var submitFeedback = document.createElement("p");
             submitFeedback.id = 'submitfeedback';
-            document.querySelector("scorebox").appendChild("submitfeedback");
+            document.querySelector("#scorebox").appendChild(submitFeedback);
 
             document.querySelector("#submitfeedback").textContent = message;
             document.querySelector("#submitfeedback").setAttribute("class", type);
-        }
+        };
 
-    document.getElementById("submit").addEventListener("click", function(event) {
+        document.getElementById("submit").addEventListener("click", function(event) {
         event.preventDefault();
 
-        var initials = document.querySelector("initialinputlabel").value;
+        var initials = document.querySelector("#initialinput").value;
 
         if (initials === ""){
             displayScoreSubmitMessage("error", "Box cannot be blank");
@@ -249,8 +249,8 @@ function endGame(){
     document.getElementById("playagainbutton").addEventListener('click', resetQuiz);
 
     return endGameRun = endGameRun + 1;
-    
 }
+
 
 function resetQuiz(){
     resetScore();
@@ -274,13 +274,13 @@ function resetTimer(){
 function resetTimerRun(){
     return timerOut = false;
 }
-function resetEndGame(){
-    return endGame = 0;
+function resetEndGameRun(){
+    return endGameRun = 0;
 }
 
 // the main function that handles everything for the quiz!
 function runQuiz(){
-    resetEndGame();
+    resetEndGameRun();
     makeQuestion();
 
     //display timer and score!
@@ -303,7 +303,7 @@ function runQuiz(){
 // Function to store the scores goes here
 function storeScore(){
     var initialsText = localStorage.getItem("initialsUser");
-    var highScoreText = localStorage.getItem("finalscore");
+    var highScoreText = localStorage.getItem("finalScore");
 
     //add both of these to the results storage item
     var highScoreEntry = {
@@ -326,7 +326,7 @@ function displayHighScores (){
     var playAgainButton = document.createElement("button");
     playAgainButton.id = 'playagainbutton';
     playAgainButton.innerText = "Play Again";
-    document.querySelector("#submitfeedback").appendChild(playAgainButton);
+    document.querySelector("#feedback").appendChild(playAgainButton);
 
     document.getElementById("playagainbutton").addEventListener('click', resetQuiz);
 
@@ -334,7 +334,7 @@ function displayHighScores (){
     for (var i = 0; i < resultsStorage.length; i++){
         var highScoreElement = document.createElement("p");
         var uniqueIdValue = 'entry' + i; // this gives each button a unique ID
-        highScoreElement.innerText = "Initials: " + resultsStorage[i].initialz + "Score: " + resultsStorage[i].scorelog;
+        highScoreElement.innerText = "Initials: " + resultsStorage[i].initialz + " Score: " + resultsStorage[i].scorelog;
         document.getElementById("contentspot").appendChild(highScoreElement);
     }
     return;
@@ -364,7 +364,7 @@ function checkForHighScores(){
         document.getElementById("playagainbutton").addEventListener('click', resetQuiz);
     }
     else {
-        return renderHighScores();
+        return displayHighScores();
     }
 }
 
