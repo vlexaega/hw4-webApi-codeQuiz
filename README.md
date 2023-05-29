@@ -3,7 +3,7 @@
 
 ## Description
 
-The purpose of this repo is to create timed coding quiz with multiple choice questions.  
+The purpose of this repo is to create a timed Javascript quiz with multiple choice questions.  
 ## Installation
 
 This repo is publicly accessible.  Installation can be achieved by the following processes:
