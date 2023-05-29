@@ -1,6 +1,7 @@
 var contentSpotEl = document.querySelector("#contentspot")
 var submitFeedbackEl = document.querySelector("#submitfeedback")
 var scoreBoxEl = document.querySelector("#scorebox")
+var timerBoxEl = document.querySelector("#timerbox")
 var questionsAndAnswers = [
     {
         question: "What is JS short for?",
@@ -71,10 +72,11 @@ function confirmOkToMakeQuestion (){
         return makeQuestion();
     }
 }
+confirmOkToMakeQuestion()
 
 // Function to make a question goes here 
 function makeQuestion (){
-    if (questionCount > (questionsAndAnswers.length - 1) && (endGameRun < 1)){
+    if (questionCount > (questionsAndAnswers.length - 1) && (endGame < 1)){
         return endGame();
     }
     else {
@@ -126,139 +128,246 @@ function checkAnswer(event){
     }
     else if (event.target.id.includes("answer") && (event.target.innerText !== questionsAndAnswers[questionCount].answers[convertAnswerstoString])){
         //tell the user they got the question wrong
-        
+        document.getElementById("answersbox").innerHTML = "";
+        feedbackElement.textContent = "Wrong!"
+        document.getElementById("submitfeedback").appendChild(feedbackElement);
+        //create function to reduce seconds if question wrong!
+        subtractSeconds();
+        questionCount++;
+        return setTimeout(confirmOkToMakeQuestion, 1000);
     }
 }
 
 // Function to subtract seconds goes here
+function subtractSeconds(){
+    //create a var for the lost second count
+    var lostSecondCount = secondCount - 20;
+    return secondCount = lostSecondCount;
+}
 
 // Function to handle timer goes here 
-
+function timerFunction (){
+    var timerID = setInterval(runSecondsCounter, 1000);
+    var timerEl = document.getElementById("timerbox");
+    function runSecondsCounter(){
+        if (endGame > 0){
+            clearInterval(timerID);
+        }
+        else {
+            return secondsCounter();
+        }
+    }
+    function secondsCounter(){
+        if (secondCount > 0){
+            secondCount--
+            return timerEl.innerHTML = "Timer: " + secondCount;
+        }
+        else if (secondCount <= 0 && ((questionCount < questionsAndAnswers.length) && (endGame < 1)) && timerOut === false){
+            timerEl.innerHTML = "TIME IS UP!";
+            clearInterval(timerID);
+            timerOut = true;
+            return setTimeout(endGame, 1000);
+        }
+        else {
+            return clearInterval(timerID);
+        }
+    }
+}
 // Function to end the game goes here
+function endGame(){
+    //wipe the content box clean
+    contentSpotEl.innerHTML = "";
+    //wipe the feedback box clean
+    submitFeedbackEl.innerHTML = "";
+    //wipe the timer box clean 
+    timerBoxEl.innerHTML = "";
 
-// Function to display score goes here
+    //create a new header to tell user thanks for playing
+    var newHeader = document.createElement("h1");
+    newHeader.textContent = "Thanks for playing!";
+    newHeader.id = 'endtext';
+    document.getElementById("contentspot").appendChild(newHeader);
+    //create a form to collect users data and save that plus the score to local storage
+    var form = document.createElement("form");
+    form.id = 'form';
+    document.getElementById("scorebox").appendChild(form);
 
+    var initialLabel = document.createElement("Label");
+    initialLabel.setAttribute("For", "initialbox");
+    initialLabel.id = 'initialinputlabel';
+    document.getElementById("form").appendChild(initialLabel);
 
+    var initialInputBox = document.createElement("input");
+    initialInputBox.setAttribute("type", "text");
+    initialInputBox.setAttribute("placeholder", "Input Initials Here");
+    initialInputBox.id = 'initialinput';
+    document.getElementById("intinputlabel").after(initialInputBox);
 
-// function setTime(){
-//     var timerInterval = setInterval(function(){
-//         secondCount--;
-//         timerEl.textContent = secondCount + " seconds remaining!!";
+    //need a submit buttonnnn
+    var submit = document.createElement("input");
+    submit.setAttribute("type", "submit");
+    submit.setAttribute("value", "Save Score");
+    submit.id = 'submit';
+    document.getElementById("initialinput").after(submit);
 
-//         if (secondCount === 0){
-//             clearInterval(timerInterval);
-//             timerEl.textContent = "Times Up!!";
-//             showScore();
-//         }
-//     }, 1000);//number of milliseconds between intervals
-// };
+    var initialInput = document.querySelector("#initialinput");
+    var submissionResponseEl = document.createElement("p");
+    document.querySelector("#submitfeedback").appendChild(submissionResponseEl);
 
+    function displayScoreSubmitMessage (type, message){
+        var submitFeedback = document.createElement("p");
+        submitFeedback.id = 'submitfeedback';
+        document.querySelector("#scorebox").appendChild(submitFeedback);
 
-// function startQuiz (){
-//     currentQuestionIndex = 0;
-//     score = 0;
-//     secondCount = 60;
-//     nextButton.innerHTML = "Next";
-//     showQuestion();
-//         // start timer here! 
-//     setTime();
-// }
+        document.querySelector("#submitfeedback").textContent = message;
+        document.querySelector("#submitfeedback").setAttribute("class", type);
+    }
 
-// function showQuestion(){
-//     resetState();
-//     var currentQuestion = questions[currentQuestionIndex];
-//     var questionNo = currentQuestionIndex + 1;
-//     questionEl.innerHTML = questionNo + ". " + currentQuestion.question; 
+    document.getElementById("submit").addEventListener("click", function(event) {
+        event.preventDefault();
+        var initials = document.querySelector("initialinput").value;
+        if (initials === ""){
+            displayScoreSubmitMessage("error", "Box cannot be blank");
+        }
+        else {
+            displayScoreSubmitMessage("success", "Your score has been saved!");
+            localStorage.setItem("initialsUser", initials);
+            localStorage.setItem("finalScore", score);
+            storeScore();
+        }
+    })
 
-//     currentQuestion.answers.forEach(answer => {
-//         var button = document.createElement("button");
-//         button.innerHTML = answer.text;
-//         button.classList.add("btn");
-//         answerButtons.appendChild(button);
-//         if (answer.correct){
-//             button.dataset.correct = answer.correct;
-//         };
-//         // if (answer = false){
-//         //     timerEl.textContent = (secondCount - 10 + " seconds remaining");
-//         // }  // I don't think this works..nope it doesn't
-//         button.addEventListener("click", selectAnswer);
-//     });
-// }
+    var playAgainButton = document.createElement("button");
+    playAgainButton.id = 'playagainbutton';
+    playAgainButton.innerText = "Play Again";
+    document.querySelector("#submitfeedback").appendChild(playAgainButton);
 
-// function resetState(){
-//     nextButton.style.display = "none";
-//     while (answerButtons.firstChild){
-//         //remove all previous answers
-//         answerButtons.removeChild(answerButtons.firstChild)
-//     };
-// };
+    document.getElementById("playagainbutton").addEventListener('click', resetQuiz);
 
-// // confirms to user if answer is correct or incorrect
-// function selectAnswer(e){
-//     var selectedBtn = e.target;
-//     var isCorrect = selectedBtn.dataset.correct === "true";
-//     //count = isCorrect++;
-//     if (isCorrect){
-//         selectedBtn.classList.add("correct");
-//         //increase score by 1
-//         // store score count into local storage 
-//         //console.log("you got 1 point");
-//         //count++;
-//         // localStorage.setItem("count", count);
-        
-//         // keep adding to score count as the questions are answered
-//     }
-//     else {
-//         selectedBtn.classList.add("incorrect");
-//     }
-//     Array.from(answerButtons.children).forEach(button => {
-//         if (button.dataset.correct === "true"){
-//             button.classList.add("correct");
-//         }
-//         button.disabled = true;
-//     });
-//     nextButton.style.display = "block";
-// }
+    return endGame = endGame + 1;
+}
 
-// //define showScore
-// function showScore (){
-//     // THIS IS WHERE WE NEED TO DISPLAY THE STORED SCORE AND OFFER PLAY AGAIN BUTTON!
-//     resetState();
-//     questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
-//     let playAgainButton = document.createElement("button");
-//     playAgainButton.addEventListener("click", function(){
-//         quizEl.removeChild(playAgainButton);
-//         startQuiz();
-//     });
-//     playAgainButton.textContent = "Play Again";
-//     quizEl.appendChild(playAgainButton);
-//     // nextButton.innerHTML = "Play Again";
-//     // playAgainButton.style.display = "block";
+function resetQuiz(){
+    resetScore();
+    resetQuestionCount();
+    resetTimer();
+    resetTimerRun();
+    document.querySelector("#submitfeedback").innerHTML = "";
+    return runQuiz();
+}
 
-// }
+function resetScore(){
+    scoreBoxEl.innerHTML = "";
+    return score = 0;
+}
+function resetQuestionCount(){
+    return questionCount = 0;
+}
+function resetTimer(){
+    return secondCount = 120;
+}
+function resetTimerRun(){
+    return timerOut = false;
+}
+function resetEndGame(){
+    return endGame = 0;
+}
 
-// //define handleNextButton to show further questions
-// function handleNextButton(){
-//     currentQuestionIndex++;
-//     if (currentQuestionIndex < questions.length){
-//         showQuestion(); // shows next question with updated question index 
-//     }
-//     else {
-//         showScore();
-//     }
-    
-// }
+// the main function that handles everything for the quiz!
+function runQuiz(){
+    resetEndGame();
+    makeQuestion();
 
-// nextButton.addEventListener("click", ()=>{
-//     if (currentQuestionIndex < questions.length){
-//         handleNextButton();
-//     }
-//     else {
-//         startQuiz();
-//     }
-// });
+    //display timer and score!
+    timerElement = document.createElement("p");
+    timerElement.id = 'timer';
+    document.getElementById("#timerbox").appendChild(timerElement);
+    timer.innerHTML = "Timer: "+ secondCount;
 
+    timerFunction();
 
+    scoreElement = document.createElement("p");
+    scoreElement.id = 'score';
+    scoreElement.textContent = 'Score:' + score;
+    document.getElementById("#scorebox").appendChild(scoreElement);
+    document.addEventListener('click', runCheckAnswer);
 
-// startQuiz();
+    return;
+}
 
+// Function to store the scores goes here
+function storeScore(){
+    var initialsText = localStorage.getItem("initialsUser");
+    var highScoreText = localStorage.getItem("finalscore");
+
+    //add both of these to the results storage item
+    var highScoreEntry = {
+        initialz: initialsText,
+        scorelog: highScoreText,
+    }
+    resultsStorage.push(highScoreEntry);
+    return
+}
+
+// Function to see the high scores goes here
+function displayHighScores (){
+    //wipe the necessary boxes clean
+    document.getElementById("contentspot").innerHTML = "",
+    document.getElementById("feedback").innerHTML = "",
+    document.getElementById("scorebox").innerHTML = "",
+    document.getElementById("timerbox").innerHTML = ""
+
+    //create the playAgain button again
+    var playAgainButton = document.createElement("button");
+    playAgainButton.id = 'playagainbutton';
+    playAgainButton.innerText = "Play Again";
+    document.querySelector("#submitfeedback").appendChild(playAgainButton);
+
+    document.getElementById("playagainbutton").addEventListener('click', resetQuiz);
+
+    //create for loop to display results if local storage has data, otherwise put an element that says no scores yet
+    for (var i = 0; i < resultsStorage.length; i++){
+        var highScoreElement = document.createElement("p");
+        var uniqueIDvalue = 'entry' + i; // this gives each button a unique ID
+        highScoreElement.innerText = "Initials: " + resultsStorage[i].initialz + "Score: " + resultsStorage[i].scorelog;
+        document.getElementById("contentspot").appendChild(highScoreElement);
+    }
+    return;
+}
+
+// INITIALIZATION WOO HOO
+document.getElementById("startbutton").addEventListener('click', runQuiz);
+document.getElementById("highscores").addEventListener('click', checkForHighScores);
+
+function checkForHighScores(){
+    if (resultsStorage.length < 1){
+        document.getElementById("contentspot").innerHTML = "";
+        document.getElementById("submitfeedback").innerHTML = "";
+        document.getElementById("scorebox").innerHTML = "";
+        document.getElementById("timerbox").innerHTML = "";
+        var newHeader = document.createElement("h1");
+        newHeader.textContent = "No Scores Yet";
+        newHeader.id = 'noscores';
+        document.getElementById("contentspot").appendChild(newHeader)
+
+        //recreate the play again buttooonnnnn
+        var playAgainButton = document.createElement("button");
+        playAgainButton.id = 'playagainbutton';
+        playAgainButton.innerText = "Play Again";
+        document.querySelector("#submitfeedback").appendChild(playAgainButton);
+
+        document.getElementById("playagainbutton").addEventListener('click', resetQuiz);
+    }
+    else {
+        return renderHighScores();
+    }
+}
+
+function runCheckAnswer(){
+    if (questionCount <= (questionsAndAnswers.length - 1)){
+        return checkAnswer(event);
+    }
+    else {
+        return
+    }
+}
