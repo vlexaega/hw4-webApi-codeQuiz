@@ -1,3 +1,6 @@
+var contentSpotEl = document.querySelector("#contentspot")
+var submitFeedbackEl = document.querySelector("#submitfeedback")
+var scoreBoxEl = document.querySelector("#scorebox")
 var questionsAndAnswers = [
     {
         question: "What is JS short for?",
@@ -47,317 +50,215 @@ var questionsAndAnswers = [
 
 ];
 
-// DEPENDENCIES
-var questionEl = document.getElementById("question");
-var answerButtons = document.getElementById("answer-buttons");
-var nextButton = document.getElementById("next-btn");
-var timerEl = document.getElementById("timer");
-var scoreboxEl = document.getElementById("scorebox");
-var initialinputEl = document.getElementById("initialinput");
-var submitfeedbackEl = document.getElementById("submitfeedback");
-var quizEl = document.querySelector(".quiz");
 
-//store question index, score and timer
-var currentQuestionIndex = 0;
+// Question variable to create index
+var questionCount = 0;
+// Score and timer
 var score = 0;
 var timerOut = false;
 var endGame = 0;
-var secondCount;
+var secondCount = 120;
+// Variable to store results
+var resultsStorage = new Array();
 
-// functions
-
-function setTime(){
-    var timerInterval = setInterval(function(){
-        secondCount--;
-        timerEl.textContent = secondCount + " seconds remaining!!";
-
-        if (secondCount === 0){
-            clearInterval(timerInterval);
-            timerEl.textContent = "Times Up!!";
-            showScore();
-        }
-    }, 1000);//number of milliseconds between intervals
-};
-
-
-function startQuiz (){
-    currentQuestionIndex = 0;
-    score = 0;
-    secondCount = 60;
-    nextButton.innerHTML = "Next";
-    showQuestion();
-        // start timer here! 
-    setTime();
+// Function to check if OK to make a new question goes here
+function confirmOkToMakeQuestion (){
+    if (secondCount < 0) {
+        return
+    }
+    else {
+        console.log("test")
+        return makeQuestion();
+    }
 }
 
-function showQuestion(){
-    resetState();
-    var currentQuestion = questions[currentQuestionIndex];
-    var questionNo = currentQuestionIndex + 1;
-    questionEl.innerHTML = questionNo + ". " + currentQuestion.question; 
-
-    currentQuestion.answers.forEach(answer => {
-        var button = document.createElement("button");
-        button.innerHTML = answer.text;
-        button.classList.add("btn");
-        answerButtons.appendChild(button);
-        if (answer.correct){
-            button.dataset.correct = answer.correct;
-        };
-        // if (answer = false){
-        //     timerEl.textContent = (secondCount - 10 + " seconds remaining");
-        // }  // I don't think this works..nope it doesn't
-        button.addEventListener("click", selectAnswer);
-    });
-}
-
-function resetState(){
-    nextButton.style.display = "none";
-    while (answerButtons.firstChild){
-        //remove all previous answers
-        answerButtons.removeChild(answerButtons.firstChild)
-    };
-};
-
-// confirms to user if answer is correct or incorrect
-function selectAnswer(e){
-    var selectedBtn = e.target;
-    var isCorrect = selectedBtn.dataset.correct === "true";
-    //count = isCorrect++;
-    if (isCorrect){
-        selectedBtn.classList.add("correct");
-        //increase score by 1
-        // store score count into local storage 
-        //console.log("you got 1 point");
-        //count++;
-        // localStorage.setItem("count", count);
+// Function to make a question goes here 
+function makeQuestion (){
+    if (questionCount > (questionsAndAnswers.length - 1) && (endGameRun < 1)){
+        return endGame();
+    }
+    else {
+        //clear the content box
+        contentSpotEl.innerHTML = "",
+        //clear the feedback box
+        submitFeedbackEl.innerHTML = "",
+        //create new question 
+        newHeader = document.createElement("h1");
+        newHeader.textContent = questionsAndAnswers[questionCount].question;
+        newHeader.id = 'question';
+        document.getElementById("contentspot").appendChild(newHeader)
+        // make an answers box to append answers rather than in the header
+        var answersBox = document.createElement("h1");
+        answersBox.id = 'answersbox';
+        document.getElementById("question").after(answersBox);
         
-        // keep adding to score count as the questions are answered
-    }
-    else {
-        selectedBtn.classList.add("incorrect");
-    }
-    Array.from(answerButtons.children).forEach(button => {
-        if (button.dataset.correct === "true"){
-            button.classList.add("correct");
+        //make the answer buttons
+        var countAnswers = (Object.values(questionsAndAnswers[questionCount].answers).length);
+        var answerArray = Object.values(questionsAndAnswers[questionCount].answers);
+        for (var i=0; i < countAnswers; i++){
+            var answerElement = document.createElement("button");
+            var uniqueButtonID = 'answer' + i; // this gives each button a unique ID
+            answerElement.id = uniqueButtonID;
+            //fill each answer button with the associated answer in the array for the specific question
+            answerElement.innerHTML = answerArray[i].toString();
+            document.getElementById("answersbox").appendChild(answerElement);
         }
-        button.disabled = true;
-    });
-    nextButton.style.display = "block";
+    }
+    return //console.log("making a question works in the background!")
 }
 
-//define showScore
-function showScore (){
-    // THIS IS WHERE WE NEED TO DISPLAY THE STORED SCORE AND OFFER PLAY AGAIN BUTTON!
-    resetState();
-    questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
-    let playAgainButton = document.createElement("button");
-    playAgainButton.addEventListener("click", function(){
-        quizEl.removeChild(playAgainButton);
-        startQuiz();
-    });
-    playAgainButton.textContent = "Play Again";
-    quizEl.appendChild(playAgainButton);
-    // nextButton.innerHTML = "Play Again";
-    // playAgainButton.style.display = "block";
 
+// Function to check the answer goes here
+function checkAnswer(event){
+    var currentQuestionAnswer = Object.values(questionsAndAnswers[questionCount].correctAnswer);
+    var convertAnswerstoString = currentQuestionAnswer.toString();
+    var feedbackElement = document.createElement("p");
+    if (event.target.id.includes("answer") && event.target.innerText === questionsAndAnswers[questionCount].answers[convertAnswerstoString]){
+        score += 10;
+        //target the scorebox in HTML!
+        scoreBoxEl.textContent = "Score: " + score;
+        //tell the user if they got the question right 
+        document.getElementById("answersbox").innerHTML = "";
+        feedbackElement.textContent = "Correct!";
+        document.getElementById("submitfeedback").appendChild(feedbackElement);
+        questionCount++;
+        return setTimeout(confirmOkToMakeQuestion, 1000);
+    }
+    else if (event.target.id.includes("answer") && (event.target.innerText !== questionsAndAnswers[questionCount].answers[convertAnswerstoString])){
+        //tell the user they got the question wrong
+        
+    }
 }
 
-//define handleNextButton to show further questions
-function handleNextButton(){
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length){
-        showQuestion(); // shows next question with updated question index 
-    }
-    else {
-        showScore();
-    }
-    
-}
+// Function to subtract seconds goes here
 
-nextButton.addEventListener("click", ()=>{
-    if (currentQuestionIndex < questions.length){
-        handleNextButton();
-    }
-    else {
-        startQuiz();
-    }
-});
+// Function to handle timer goes here 
+
+// Function to end the game goes here
+
+// Function to display score goes here
 
 
 
-startQuiz();
+// function setTime(){
+//     var timerInterval = setInterval(function(){
+//         secondCount--;
+//         timerEl.textContent = secondCount + " seconds remaining!!";
 
-
-
-// function displayScoreSubmitMessage(type, message){
-//     var submitFeedback = document.createElement("p");
-//     submitFeedback.id = 'submitFeedback';
-//     document.querySelector('#scorebox').appendChild(submitFeedback);
-//     document.querySelector('#submitfeedback').textContent = message;
-//     document.querySelector('#submitfeedback').setAttribute = ("class", type);
-// }
-// document.getElementById("next-btn").addEventListener("click", function(event){
-//     event.preventDefault();
-//     var initials = document.querySelector('#initialinput');
-//     if (initials === ""){
-//         displayScoreSubmitMessage("error", "Box cannot be blank");
-//     }
-//     else {
-//         displayScoreSubmitMessage("success", "Your score has been saved!");
-//         localStorage.setItem("initialZ", initials);
-//         localStorage.setItem("finalScore", score);
-//         storeScore();
-//     }
-// });
-
-// function storeScore(){
-//     var initialsText = localStorage.getItem("initialZ");
-//     var highscoreText = localStorage.getItem("finalScore");
-
-//     var highScoreEntry = {
-//         initialZ: initialsText,
-//         scorelog: highscoreText
-//     };
-//     resultsStorage.push(highScoreEntry);
-//     console.log("STORESCORE HAS RUN");
-
+//         if (secondCount === 0){
+//             clearInterval(timerInterval);
+//             timerEl.textContent = "Times Up!!";
+//             showScore();
+//         }
+//     }, 1000);//number of milliseconds between intervals
 // };
 
 
-
-// function displayScoreSubmitMessage(type, message) {
-//     var submitfeedback = document.createElement("p");
-//     submitfeedback.id = 'submitfeedback'; 
-//     document.querySelector("#scorebox").appendChild(submitfeedback);
-
-//     document.querySelector("#submitfeedback").textContent = message;
-//     document.querySelector("#submitfeedback").setAttribute("class", type);
-//     }
-
-// document.getElementById("submit").addEventListener("click", function(event) {
-//     event.preventDefault();
-
-//     var initials = document.querySelector("#initialinput").value;
-
-//     if (initials === "") {
-//         displayScoreSubmitMessage("error", "Box cannot be blank");
-//     }
-
-//     else {
-//         displayScoreSubmitMessage("success", "Your score has been saved!");
-//     // Save initials and score to localStorage 
-//     localStorage.setItem("initialzz", initials);
-//     localStorage.setItem("finalScore", score);
-//     storeScore();
-//     }
-//     })
-// function storeScore() {
-//     //Retrieve the stuff
-//   var initialsText = localStorage.getItem("initialzz");
-//   var highscoreText = localStorage.getItem("finalScore");
-
-//   //take both and add to resultsStorage
-//   var highScoreEntry = {
-//         initialz: initialsText,
-//         scorelog: highscoreText
-//   };
-
-//   resultsStorage.push(highScoreEntry);
-//   return ////console.log("STORESCORE HAS RUN");
-
-
-
-
-
-
-// // IDEAS OF USE
-// // DEPENDENCIES 
-// var questionsEl = document.querySelector('#questions');
-// var timerEl = document.querySelector('#timer');
-// var startQuizEl = document.querySelector('#startQuiz');
-
-// // Determining number of questions 
-// var questionCount = 0;
-
-// // Scoreboard details
-// var score = 0;
-// var secondCount = 120;
-// var timeOut = false;
-// var endGame = 0;
-
-// // Array to store the results
-// var resultsArray = [];
-// // var startQuiz = document.querySelector("#startQuiz");
-// var questionsAndAnswers = [
-//     {
-//         question: "What is js short for?",
-//         answers: {
-//             a: 'Javascript',
-//             b: 'Justsurf',
-//             c: 'Joinsomething',
-//             d: 'justslump',
-//         },
-//         correctAnswers: 'a',
-//     },
-// ]
-
-// startQuiz.addEventListener("click", startQuiz);
-// // User starts quiz
-// // triggers setTime() function
-// function startQuiz () {
-//     console.log(question);
-//     var userSelection = [];
-//     if (questionCount > (questionsAndAnswers.length - 1) && (endGameRun <1)) {
-//         return endGame();
-//     }
-//     else {
-//         var newHeader = document.createElement ("h1");
-//         newHeader.textContent = questionsAndAnswers[questionCount].question;
-//         newHeader.id = 'questions';
-//         document.getElementById("questions").appendChild(newHeader)
-//     }
-
+// function startQuiz (){
+//     currentQuestionIndex = 0;
+//     score = 0;
+//     secondCount = 60;
+//     nextButton.innerHTML = "Next";
+//     showQuestion();
+//         // start timer here! 
+//     setTime();
 // }
-// function startQuiz()
-// // Show user the question and listen for clicks on the button #startQuiz
-// // function newQuestion(){
-// //     question1.addEventLister("click", function() {
 
-// //     }
+// function showQuestion(){
+//     resetState();
+//     var currentQuestion = questions[currentQuestionIndex];
+//     var questionNo = currentQuestionIndex + 1;
+//     questionEl.innerHTML = questionNo + ". " + currentQuestion.question; 
 
-// // };
+//     currentQuestion.answers.forEach(answer => {
+//         var button = document.createElement("button");
+//         button.innerHTML = answer.text;
+//         button.classList.add("btn");
+//         answerButtons.appendChild(button);
+//         if (answer.correct){
+//             button.dataset.correct = answer.correct;
+//         };
+//         // if (answer = false){
+//         //     timerEl.textContent = (secondCount - 10 + " seconds remaining");
+//         // }  // I don't think this works..nope it doesn't
+//         button.addEventListener("click", selectAnswer);
+//     });
+// }
 
-// // Creating the timer
-// function setTime () {
-//     var timerInterval = setInterval(function() {
-//         secondCount--;
-//         timerEl.textContent = secondCount + " time remaining.";
+// function resetState(){
+//     nextButton.style.display = "none";
+//     while (answerButtons.firstChild){
+//         //remove all previous answers
+//         answerButtons.removeChild(answerButtons.firstChild)
+//     };
+// };
 
-//         if (secondCount === 0) {
-//             clearInterval(timerInterval);
-//             sendMessage();
+// // confirms to user if answer is correct or incorrect
+// function selectAnswer(e){
+//     var selectedBtn = e.target;
+//     var isCorrect = selectedBtn.dataset.correct === "true";
+//     //count = isCorrect++;
+//     if (isCorrect){
+//         selectedBtn.classList.add("correct");
+//         //increase score by 1
+//         // store score count into local storage 
+//         //console.log("you got 1 point");
+//         //count++;
+//         // localStorage.setItem("count", count);
+        
+//         // keep adding to score count as the questions are answered
+//     }
+//     else {
+//         selectedBtn.classList.add("incorrect");
+//     }
+//     Array.from(answerButtons.children).forEach(button => {
+//         if (button.dataset.correct === "true"){
+//             button.classList.add("correct");
 //         }
-//     }, 1000);
+//         button.disabled = true;
+//     });
+//     nextButton.style.display = "block";
 // }
 
-// function sendMessage () {
-//     prompt(questionsAndAnswers);
+// //define showScore
+// function showScore (){
+//     // THIS IS WHERE WE NEED TO DISPLAY THE STORED SCORE AND OFFER PLAY AGAIN BUTTON!
+//     resetState();
+//     questionEl.innerHTML = 'You scored  ' + score + ' out of ' + questions.length + '!'; 
+//     let playAgainButton = document.createElement("button");
+//     playAgainButton.addEventListener("click", function(){
+//         quizEl.removeChild(playAgainButton);
+//         startQuiz();
+//     });
+//     playAgainButton.textContent = "Play Again";
+//     quizEl.appendChild(playAgainButton);
+//     // nextButton.innerHTML = "Play Again";
+//     // playAgainButton.style.display = "block";
+
 // }
 
-// // INITIALIZATIONS 
-// setTime();
+// //define handleNextButton to show further questions
+// function handleNextButton(){
+//     currentQuestionIndex++;
+//     if (currentQuestionIndex < questions.length){
+//         showQuestion(); // shows next question with updated question index 
+//     }
+//     else {
+//         showScore();
+//     }
+    
+// }
 
-// // ROUGH IDEAS 
-// // User sees quiz questions and responses
-//     // presented with question 1 and response options
-//         // if response incorrect, reduce timer by 10 seconds
-//         // else continue
-//         // occurs for each question
-//             // needs to determine which question user is on
-//         // once all questions answered:
-//             // display score 
-//                 // update text to reflect new score and previous score 
-//         // prompt user for try again?
+// nextButton.addEventListener("click", ()=>{
+//     if (currentQuestionIndex < questions.length){
+//         handleNextButton();
+//     }
+//     else {
+//         startQuiz();
+//     }
+// });
 
+
+
+// startQuiz();
 
