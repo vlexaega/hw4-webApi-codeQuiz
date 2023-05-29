@@ -1,44 +1,49 @@
-var questions = [
+var questionsAndAnswers = [
     {
         question: "What is JS short for?",
-        answers: [
-            { text: "Javascript", correct: true},
-            { text: "Justsurf", correct: false},
-            { text: "Joinsomething", correct: false},
-            { text: "Justslump", correct: false},
-        ]},
+        answers: {
+            a: "Javascript",
+            b: "Justsurf",
+            c: "Joinsomething",
+            d: "Justslump", 
+        },
+        correctAnswer: 'a'},
         {
             question: "What is Javascript?",
-            answers: [
-                { text: "Javascript is a scripting language used to make the website interactive", correct: true},
-                { text: "JavaScript is an assembly language used to make the website interactive", correct: false},
-                { text: "JavaScript is a compiled language used to make the website interactive", correct: false},
-                { text: "None of the mentioned", correct: false},
-            ]},
+            answers: {
+                a: "Javascript is a scripting language used to make the website interactive",
+                b: "JavaScript is an assembly language used to make the website interactive",
+                c: "JavaScript is a compiled language used to make the website interactive",
+                d: "None of the mentioned", 
+            },
+        correctAnswer: 'a'},
         {
             question: "Among the given statements, which statement defines closures in JavaScript?", 
-            answers: [
-                { text: "JavaScript is a function that is enclosed with references to its inner function scope", correct: false},
-                { text: "JavaScript is a function that is enclosed with references to its lexical environment", correct: true},
-                { text: "JavaScript is a function that is enclosed with the object to its inner function scope", correct: false},
-                { text: "None of the mentioned", correct: false},
-            ]},
+            answers: {
+                a: "JavaScript is a function that is enclosed with references to its inner function scope", 
+                b: "JavaScript is a function that is enclosed with references to its lexical environment", 
+                c: "JavaScript is a function that is enclosed with the object to its inner function scope", 
+                d: "None of the mentioned", 
+            },
+        correctAnswer: 'b'},
         {
             question: "Which of the following is not javascript data types?", 
-            answers: [
-                { text: "Null type", correct: false},
-                { text: "Undefined type", correct: false},
-                { text: "Number type", correct: false},
-                { text: "All of the mentioned", correct: true},
-            ]},
+            answers: {
+                a: "Null type",
+                b: "Undefined type", 
+                c: "Number type", 
+                d: "All of the mentioned", 
+            },
+        correctAnswer: 'd'},
         {
             question: " Which of the following object is the main entry point to all client-side JavaScript features and APIs?", 
-            answers: [
-                { text: "Position", correct: false},
-                { text: "Window", correct: true},
-                { text: "Standard", correct: false},
-                { text: "Location", correct: false},
-            ]},
+            answers: {
+                a: "Position",
+                b: "Window", 
+                c: "Standard", 
+                d: "Location", 
+            },
+        correctAnswer: 'b'},
 
 ];
 
