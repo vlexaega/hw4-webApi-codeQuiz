@@ -1,3 +1,87 @@
 * {
-    border: 1px solid black
+    background: rgb(30, 190, 230);
+    color: #fff;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 15px;
 }
+
+body {
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    min-height: 100%;
+    text-align: center;
+    
+}
+
+h1 {
+    font-size: 3em;
+    display:block;
+    align-items: center;
+    margin: 50px;
+}
+
+p {
+    font-size: 1.5em;
+    display: block;
+    margin-top: 15%;
+}
+
+#contentspot, #startgame {
+    margin-top: 15%;
+}
+#answersbox {
+    display: block;
+    width: 400px;
+    height: auto;
+    margin: 10px auto;
+    font-size: 30px;
+}
+
+#highscores {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 15px;
+    width:100px;
+    padding: 10px;
+    font-size: 1.5em;
+
+}
+
+#scorebox {
+    font-size: 1.5em;
+    margin-top: 4%;
+}
+
+#timerbox {
+    position: fixed;
+    font-size: 1.5em;
+    top: 0;
+    right: 0;
+    width: 100px;
+    padding: 10px;
+    /* border: solid 2px navy; */
+    /* color: navy; */
+    margin-top: 1%;
+}
+
+/* #scorebox {
+    position: fixed;
+    top: 0;
+    border: solid 2px navy;
+    color: navy;
+    margin: 10px;
+} */
+
+/* #answersbox, #question {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+#answersbox {
+    margin-left: 50%;
+    margin-right: 50%;
+} */

@@ -59,7 +59,7 @@ var questionCount = 0;
 var score = 0;
 var timerOut = false;
 var endGameRun = 0;
-var secondCount = 120;
+var secondCount = 60;
 // Variable to store results
 var resultsStorage = new Array();
 
@@ -163,11 +163,11 @@ function timerFunction (){
             secondCount--
             return timerEl.innerHTML = "Timer: " + secondCount;
         }
-        else if (secondCount <= 0 && ((questionCount < questionsAndAnswers.length) && (endGameRun < 1)) && timerOut === false){
+        else if (secondCount <= 0 || ((questionCount < questionsAndAnswers.length) || (endGameRun < 1)) || timerOut === false){
             timerEl.innerHTML = "TIME IS UP!";
             clearInterval(timerID);
             timerOut = true;
-            return setTimeout(endGame, 1000);
+            return setTimeout(endGame(), 1000);
         }
         else {
             return clearInterval(timerID);
@@ -269,7 +269,7 @@ function resetQuestionCount(){
     return questionCount = 0;
 }
 function resetTimer(){
-    return secondCount = 120;
+    return secondCount = 60;
 }
 function resetTimerRun(){
     return timerOut = false;
