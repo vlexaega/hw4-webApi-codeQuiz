@@ -1,5 +1,5 @@
 
-# Javascript Challenge: Password Generator
+# WEB API - CODE QUIZ with JAVASCRIPT
 
 ## Description
 
